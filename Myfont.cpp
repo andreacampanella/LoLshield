@@ -147,15 +147,16 @@ const byte la[][5] PROGMEM = {
 		{0x00,0x41,0x36,0x08,0x00}, /* ASCII-Code 0x7D => } */
 		{0x08,0x08,0x2A,0x1C,0x08}, /* ASCII-Code 0x7E => -> */
 		{0x08,0x1C,0x2A,0x08,0x08}}; /* ASCII-Code 0x7F => <- */
+
 void Myfont::Draw(int xval, unsigned char chr) /*draws an ascii char to the screen using the given x value */
 {
     uint8_t mode = LedSign::DisplayMode();
 	uint8_t vr=0;
     vr=chr;
-    for(uint8_t i=0; i<5; i++)
+    for(uint8_t i= 0; i < 5; i++)
     {
         uint8_t mask = 0x01;  /*bitmask used to select the different bits from the values in the table*/
-        for(uint8_t j=0; j<7; j++)
+        for(uint8_t j=7; j>0; j--)
         {
             
             uint8_t tmps=pgm_read_byte( &la[vr][i] )&mask; /*read a value from the table and do a & with the mask*/
@@ -169,12 +170,13 @@ void Myfont::Draw(int xval, unsigned char chr) /*draws an ascii char to the scre
                 tmps=0;
             }
             if(xval+i<14 && (xval+i) >(-1)){ /*only write x vals that are existing on the screen*/
-                LedSign::Set(xval+i, j+1, tmps); /*write it*/
+                LedSign::Set(xval+i, j+1,tmps);//Myfont::Bit_Reverse(tmps)); /*write it*/
             }
             mask <<= 1; /*take the next bit of the val from the table*/
         }
     }
 }
+
 
 void Myfont::Banner(int len, unsigned char* text){ /* text banner creator. use with example code!!*/
     
